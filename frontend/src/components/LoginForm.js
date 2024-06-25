@@ -1,6 +1,6 @@
 // LoginForm.js
 import React, { useState } from 'react';
-import { loginUser } from '../api'; // Import your API function
+import { loginUser } from '../api'; 
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
@@ -14,14 +14,13 @@ const LoginForm = () => {
             const response = await loginUser(username, password);
             console.log('Login Successful:', response);
 
-            // Assuming response contains username, passwordHash, and email
             const userData = {
+                userId: response.userId,
                 username: response.username,
                 password: response.passwordHash,
                 email: response.email
             };
 
-            // Navigate to main page with userData as state
             navigate('/main', { state: { userData } });
         } catch (error) {
             console.error('Login Error:', error);

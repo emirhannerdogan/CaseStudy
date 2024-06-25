@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Management.Data;
 using Management.Models;
 using Management.DTOs;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Management.Controllers
 {
@@ -109,7 +112,7 @@ namespace Management.Controllers
             return NoContent();
         }
 
-        
+        // POST: api/Users/login
         [HttpPost("login")]
         public async Task<ActionResult<User>> Login(LoginDto loginDto)
         {
@@ -129,6 +132,20 @@ namespace Management.Controllers
             };
 
             return Ok(userInfo);
+        }
+
+        // GET: api/Users/username/{username}
+        [HttpGet("username/{username}")]
+        public async Task<ActionResult<User>> GetUserByUsername(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
         private bool UserExists(int id)

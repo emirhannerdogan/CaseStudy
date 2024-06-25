@@ -105,7 +105,20 @@ namespace Management.Controllers
 
             return NoContent();
         }
+        [HttpGet("User/{userId}")]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByUserId(int userId)
+        {
+            var transactions = await _context.Transactions
+                .Where(t => t.UserId == userId)
+                .ToListAsync();
 
+            if (transactions == null || transactions.Count == 0)
+            {
+                return NotFound("No transactions found for the specified user.");
+            }
+
+            return transactions;
+        }
         private bool TransactionExists(int id)
         {
             return _context.Transactions.Any(e => e.TransactionId == id);

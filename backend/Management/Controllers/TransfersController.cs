@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Management.Data;
 using Management.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Management.Controllers
 {
@@ -77,10 +80,20 @@ namespace Management.Controllers
         [HttpPost]
         public async Task<ActionResult<Transfer>> PostTransfer(TransferDto transferDto)
         {
+            var fromUser = await _context.Users.FindAsync(transferDto.FromUserId);
+            var toUser = await _context.Users.FindAsync(transferDto.ToUserId);
+
+            if (fromUser == null || toUser == null)
+            {
+                return BadRequest("Invalid user IDs.");
+            }
+
             var transfer = new Transfer
             {
                 FromUserId = transferDto.FromUserId,
+                FromUserName = fromUser.Username, // Kullanıcı adını ekle
                 ToUserId = transferDto.ToUserId,
+                ToUserName = toUser.Username, // Kullanıcı adını ekle
                 Amount = transferDto.Amount,
                 TransferDate = transferDto.TransferDate
             };
@@ -107,6 +120,15 @@ namespace Management.Controllers
             return NoContent();
         }
 
+        [HttpGet("User/{userId}")]
+        public async Task<ActionResult<IEnumerable<Transfer>>> GetTransfersByUserId(int userId)
+        {
+            var transfers = await _context.Transfers
+                .Where(t => t.FromUserId == userId || t.ToUserId == userId)
+                .ToListAsync();
+
+            return transfers;
+        }
         private bool TransferExists(int id)
         {
             return _context.Transfers.Any(e => e.TransferId == id);

@@ -1,25 +1,70 @@
-// MainPage.js
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getUserById } from '../api';
 
 const MainPage = () => {
-    const location = useLocation();
-    const userData = location.state && location.state.userData;
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
 
-    return (    
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (location.state && location.state.userData) {
+          setUserData(location.state.userData);
+        } else if (userData && userData.userId) {
+          const user = await getUserById(userData.userId);
+          setUserData(user);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [location.state, userData]);
+
+  const handleEditProfile = () => {
+    navigate('/profile/edit', { state: { userData } });
+  };
+
+  const handleViewTransactions = async () => {
+    try {
+      if (!userData || !userData.userId) {
+        console.error('User data or userId is missing.');
+        return;
+      }
+
+      navigate('/transactions', { state: { userId: userData.userId } });
+    } catch (error) {
+      console.error('Error navigating to transactions:', error);
+    }
+  };
+
+  const handleViewTransfers = () => {
+    navigate('/transfers', { state: { userId: userData.userId } });
+  };
+
+  const handleLogout = () => {
+    navigate('/');
+  };
+
+  return (
+    <div>
+      <h2>Welcome to Main Page</h2>
+      {userData ? (
         <div>
-            <h2>Welcome to Main Page</h2>
-            {userData ? (
-                <div>
-                    <p>Username: {userData.username}</p>
-                    <p>Password: {userData.password}</p>
-                    <p>Email: {userData.email}</p>
-                </div>
-            ) : (
-                <p>Loading user data...</p>
-            )}
+          <p>Username: {userData.username}</p>
+          <button onClick={handleEditProfile}>Profil Düzenle</button>
+          <button onClick={handleViewTransactions}>Transactionları Görüntüle</button>
+          <button onClick={handleViewTransfers}>Transferleri Görüntüle</button>
+          <button onClick={handleLogout}>Hesaptan Çık</button>
         </div>
-    );
+      ) : (
+        <p>Loading user data...</p>
+      )}
+    </div>
+  );
 };
 
 export default MainPage;
