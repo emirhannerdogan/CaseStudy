@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { updateUser, deleteUser } from '../api';
+import '../css/ProfileEditForm.css';
 
 const ProfileEditForm = () => {
     const location = useLocation();
@@ -61,7 +63,7 @@ const ProfileEditForm = () => {
     };
 
     return (
-        <div>
+        <div className="form-container">
             <h2>Profil Düzenle</h2>
             <form onSubmit={handleUpdateProfile}>
                 <label>Kullanıcı Adı:</label>

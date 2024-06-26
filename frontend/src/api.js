@@ -161,6 +161,24 @@ const addTransfer = async (transferData) => {
     }
 };
 
+const updateTransfer = async (transferId, updatedTransferData) => {
+    try {
+        const response = await axios.put(`${API_URL}/Transfers/${transferId}`, updatedTransferData, {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Server Error:', error.response.data);
+        } else {
+            console.error('Request Error:', error.message);
+        }
+        throw error;
+    }
+};
 
 
 
@@ -178,4 +196,5 @@ export {
     deleteTransfer,
     getUserByUsername,
     addTransfer,
+    updateTransfer
 };

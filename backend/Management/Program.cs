@@ -1,4 +1,4 @@
-using Management.Data;
+﻿using Management.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,3 +38,4 @@ app.UseCors("AllowSpecificOrigin");
 app.MapControllers();
 
 app.Run();
+

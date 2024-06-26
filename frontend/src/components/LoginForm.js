@@ -1,7 +1,7 @@
-// LoginForm.js
 import React, { useState } from 'react';
-import { loginUser } from '../api'; 
+import { loginUser } from '../api'; // Import your API function
 import { useNavigate } from 'react-router-dom';
+import '../css/LoginForm.css'; // Import CSS file
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');
@@ -29,13 +29,13 @@ const LoginForm = () => {
     };
 
     return (
-        <div>
+        <div className="login-form-container">
             <h2>Giriş Yap</h2>
             <input type="text" placeholder="Kullanıcı Adı" value={username} onChange={(e) => setUsername(e.target.value)} />
             <input type="password" placeholder="Şifre" value={password} onChange={(e) => setPassword(e.target.value)} />
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
             <button onClick={handleLogin}>Giriş Yap</button>
-            <p>Hesabınız yoksa <a href="/register">hesap oluşturun</a></p>
+            <p className="register-link">Hesabınız yoksa <a href="/register">hesap oluşturun</a></p>
         </div>
     );
 };

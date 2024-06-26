@@ -1,7 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getUserById, getUserByUsername, getTransfersByUserId, addTransfer, deleteTransfer} from '../api';
-
+import { getUserById, getUserByUsername, getTransfersByUserId, addTransfer, deleteTransfer, updateTransfer } from '../api';
 import '../css/TransfersPage.css';
 
 const TransfersPage = () => {
@@ -10,7 +10,7 @@ const TransfersPage = () => {
     const [transfers, setTransfers] = useState([]);
     const [toUsername, setToUsername] = useState('');
     const [amount, setAmount] = useState(0);
-    const [userNotFound, setUserNotFound] = useState(false);
+    const [userNotFound, setUserNotFound] = useState(false); 
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,7 +31,6 @@ const TransfersPage = () => {
             const toUser = await getUserByUsername(toUsername);
 
             if (!toUser) {
-               
                 setUserNotFound(true);
                 return;
             }
@@ -40,7 +39,7 @@ const TransfersPage = () => {
                 fromUserId: userId,
                 fromUserName: '',
                 toUserId: toUser.userId,
-                toUserName: '',
+                toUserName: '', 
                 amount: amount,
                 transferDate: new Date().toISOString()
             };
@@ -63,15 +62,51 @@ const TransfersPage = () => {
         }
     };
 
+    const handleEditTransfer = async (transferId, toUserId, fromUserId) => {
+        if (fromUserId !== userId) {
+            window.alert('Bu transferi düzenlemek için yetkiniz yok.');
+            return;
+        }
     
+        try {
+            const transferToUpdate = transfers.find((transfer) => transfer.transferId === transferId);
     
-
+            const toUser = await getUserById(toUserId);
+            const fromUser = await getUserById(fromUserId);
+    
+            if (!toUser || !fromUser) {
+                window.alert('Kullanıcı bulunamadı!');
+                return;
+            }
+    
+            const updatedAmount = prompt('Yeni miktarı girin:');
+            if (updatedAmount === null || isNaN(updatedAmount)) {
+                return;
+            }
+    
+            const updatedTransferData = {
+                ...transferToUpdate,
+                toUserName: toUser.username,
+                fromUserName: fromUser.username,
+                amount: parseFloat(updatedAmount)
+            };
+    
+            await updateTransfer(transferId, updatedTransferData);
+            const updatedTransfers = transfers.map((transfer) =>
+                transfer.transferId === transferId ? { ...transfer, ...updatedTransferData } : transfer
+            );
+            setTransfers(updatedTransfers);
+        } catch (error) {
+            console.error('Error updating transfer:', error);
+        }
+    };
+    
     const handleBack = () => {
         navigate(-1);
     };
 
     return (
-        <div>
+        <div className="transfers-container">
             <h1>Transfers</h1>
             <input
                 type="text"
@@ -79,7 +114,7 @@ const TransfersPage = () => {
                 onChange={(e) => setToUsername(e.target.value)}
                 placeholder="To User Username"
             />
-            {userNotFound && <p style={{ color: 'red' }}>Kullanıcı bulunamadı!</p>}
+            {userNotFound && <p className="error-message">Kullanıcı bulunamadı!</p>}
             <input
                 type="number"
                 value={amount}
@@ -105,7 +140,7 @@ const TransfersPage = () => {
                             <td>{transfer.amount}</td>
                             <td>{new Date(transfer.transferDate).toLocaleDateString()}</td>
                             <td>
-                                
+                                <button onClick={() => handleEditTransfer(transfer.transferId, transfer.toUserId, transfer.fromUserId)}>Edit</button>
                                 <button onClick={() => handleDeleteTransfer(transfer.transferId)}>Delete</button>
                             </td>
                         </tr>

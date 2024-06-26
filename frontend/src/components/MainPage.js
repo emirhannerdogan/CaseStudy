@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserById } from '../api';
+import '../css/MainPage.css'; 
 
 const MainPage = () => {
   const location = useLocation();
@@ -42,7 +44,16 @@ const MainPage = () => {
   };
 
   const handleViewTransfers = () => {
-    navigate('/transfers', { state: { userId: userData.userId } });
+    try {
+      if (!userData || !userData.userId) {
+        console.error('User data or userId is missing.');
+        return;
+      }
+
+      navigate('/transfers', { state: { userId: userData.userId } });
+    } catch (error) {
+      console.error('Error navigating to transactions:', error);
+    };
   };
 
   const handleLogout = () => {
@@ -50,15 +61,17 @@ const MainPage = () => {
   };
 
   return (
-    <div>
+    <div className="main-page-container">
       <h2>Welcome to Main Page</h2>
       {userData ? (
-        <div>
+        <div className="user-info">
           <p>Username: {userData.username}</p>
-          <button onClick={handleEditProfile}>Profil Düzenle</button>
-          <button onClick={handleViewTransactions}>Transactionları Görüntüle</button>
-          <button onClick={handleViewTransfers}>Transferleri Görüntüle</button>
-          <button onClick={handleLogout}>Hesaptan Çık</button>
+          <div className="button-container">
+            <button onClick={handleEditProfile}>Profil Düzenle</button>
+            <button onClick={handleViewTransactions}>Transactionları Görüntüle</button>
+            <button onClick={handleViewTransfers}>Transferleri Görüntüle</button>
+            <button onClick={handleLogout}>Hesaptan Çık</button>
+          </div>
         </div>
       ) : (
         <p>Loading user data...</p>

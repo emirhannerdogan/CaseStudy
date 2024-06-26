@@ -1,0 +1,90 @@
+@startuml
+
+!define RECTANGLE class
+
+RECTANGLE App {
+}
+
+RECTANGLE LoginForm {
+  +username: String
+  +password: String
+  +login()
+  +showError()
+}
+
+RECTANGLE RegisterForm {
+  +username: String
+  +password: String
+  +email: String
+  +register()
+}
+
+RECTANGLE MainPage {
+  +username: String
+  +viewTransactions()
+  +viewTransfers()
+  +editProfile()
+  +logout()
+}
+
+RECTANGLE ProfileEditForm {
+  +username: String
+  +password: String
+  +email: String
+  +saveChanges()
+  +deleteAccount()
+}
+
+RECTANGLE TransactionsPage {
+  +viewTransactions()
+  +addTransaction(description: String, amount: float)
+  +editTransaction(transactionId: String)
+  +deleteTransaction(transactionId: String)
+}
+
+RECTANGLE TransfersPage {
+  +addTransfer(toUser: String, amount: float)
+  +editTransfer(transferId: String)
+  +deleteTransfer(transferId: String)
+}
+
+RECTANGLE API {
+  +registerUser(userData)
+  +loginUser(username, password)
+  +getUserById(id)
+  +updateUser(userId, userDto)
+  +deleteUser(userId)
+  +getTransactionsByUserId(userId)
+  +updateTransaction(transactionId, transactionDto)
+  +addTransaction(transactionData)
+  +deleteTransaction(transactionId)
+  +getTransfersByUserId(userId)
+  +deleteTransfer(transferId)
+  +getUserByUsername(username)
+  +addTransfer(transferData)
+  +updateTransfer(transferId, updatedTransferData)
+}
+
+App --> LoginForm
+App --> RegisterForm
+App --> MainPage
+App --> ProfileEditForm
+App --> TransactionsPage
+App --> TransfersPage
+
+MainPage --> ProfileEditForm : "edit profile"
+MainPage --> TransactionsPage : "view transactions"
+MainPage --> TransfersPage : "view transfers"
+
+ProfileEditForm --> MainPage : "back"
+ProfileEditForm --> LoginForm : "delete account"
+TransactionsPage --> MainPage : "back"
+TransfersPage --> MainPage : "back"
+
+LoginForm --> API : "loginUser"
+RegisterForm --> API : "registerUser"
+ProfileEditForm --> API : "getUserById, updateUser, deleteUser"
+TransactionsPage --> API : "getTransactionsByUserId, addTransaction, updateTransaction, deleteTransaction"
+TransfersPage --> API : "getTransfersByUserId, addTransfer, updateTransfer, deleteTransfer"
+
+@enduml

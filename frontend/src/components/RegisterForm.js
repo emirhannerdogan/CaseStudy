@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../api'; // api.js dosyasına göre import yolu
+import { registerUser } from '../api';
+import '../css/RegisterForm.css';
 
 const RegisterForm = () => {
     const navigate = useNavigate();
@@ -8,7 +9,8 @@ const RegisterForm = () => {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
 
-    const handleRegister = async () => {
+    const handleRegister = async (e) => {
+        e.preventDefault();
         try {
             const userData = {
                 username,
@@ -16,14 +18,14 @@ const RegisterForm = () => {
                 email
             };
             await registerUser(userData);
-            navigate.push('/login'); // Kayıt başarılıysa yönlendirme yapın
+            navigate.push('/login');
         } catch (error) {
             console.error('Kullanıcı kaydı sırasında bir hata oluştu:', error);
         }
     };
 
     return (
-        <div>
+        <div className="form-container">
             <h2>Kayıt Ol</h2>
             <form onSubmit={handleRegister}>
                 <label>

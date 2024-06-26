@@ -1,0 +1,67 @@
+
+.page-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.page-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.page-container button {
+    margin-bottom: 10px;
+}
+
+.transaction-container {
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.transaction-container input[type="text"],
+.transaction-container input[type="number"] {
+    width: calc(50% - 10px);
+    padding: 8px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.transaction-container input[type="text"]:last-child,
+.transaction-container input[type="number"]:last-child {
+    margin-right: 0;
+}
+
+.transaction-container button {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.transaction-container button:last-child {
+    margin-right: 0;
+}
+
+.transaction-container p {
+    margin-bottom: 5px;
+}
+
+.transaction-container .edit-container {
+    margin-top: 10px;
+}
+
+.transaction-container .edit-container button {
+    margin-right: 10px;
+}
+
+.transaction-container .edit-container button:last-child {
+    margin-right: 0;
+}
