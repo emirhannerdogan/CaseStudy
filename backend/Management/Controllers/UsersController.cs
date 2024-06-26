@@ -52,7 +52,7 @@ namespace Management.Controllers
             }
 
             user.Username = userDto.Username;
-            user.PasswordHash = userDto.Password; // Şifreyi hashleyin
+            user.PasswordHash = userDto.Password;
             user.Email = userDto.Email;
             user.UpdatedDate = DateTime.UtcNow;
 
@@ -128,7 +128,7 @@ namespace Management.Controllers
                 UserId = user.UserId,
                 Username = user.Username,
                 Email = user.Email,
-                PasswordHash = user.PasswordHash // PasswordHash geri döndürüyoruz
+                PasswordHash = user.PasswordHash
             };
 
             return Ok(userInfo);

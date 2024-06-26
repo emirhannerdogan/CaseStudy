@@ -91,9 +91,9 @@ namespace Management.Controllers
             var transfer = new Transfer
             {
                 FromUserId = transferDto.FromUserId,
-                FromUserName = fromUser.Username, // Kullanıcı adını ekle
+                FromUserName = fromUser.Username,
                 ToUserId = transferDto.ToUserId,
-                ToUserName = toUser.Username, // Kullanıcı adını ekle
+                ToUserName = toUser.Username,
                 Amount = transferDto.Amount,
                 TransferDate = transferDto.TransferDate
             };
